@@ -1,0 +1,4 @@
+Insert into the template of your website the following code (just before or just after the main text of the page):
+
+<div class="share42init" data-top1="150" data-top2="20" data-margin="0"></div>
+<script type="text/javascript" src="http://www.euromoveis.net/share42/horizontal/product/share42.js"></script>

@@ -1,0 +1,42 @@
+---------- Date: 2021-07-05 01:41:15 ~ IP : 66.249.66.85 ----------
+REQUEST URI : /index.php?route=product/ajaxcompare/compare_list
+MOD DETAILS:
+   modFile   : /home/platne/brasserwis/public_html/comparator/vqmod/xml/seo-single-url-home-continue.xml
+   id        : SEO Single Url - Continue Home Link
+   version   : 1
+   vqmver    : 2.1.7
+   author    : www.zadenzo.com
+
+File Name    : catalog/controller/product/*.php(0)
+VQModObject::applyMod - SEARCH NOT FOUND (ABORTING MOD): $this->url->link('common/home')
+----------------------------------------------------------------------
+
+
+---------- Date: 2021-07-05 02:55:52 ~ IP : 34.122.236.147 ----------
+REQUEST URI : /index.php?route=product/ajaxcompare/compare_list
+MOD DETAILS:
+   modFile   : /home/platne/brasserwis/public_html/comparator/vqmod/xml/seo-single-url-home-continue.xml
+   id        : SEO Single Url - Continue Home Link
+   version   : 1
+   vqmver    : 2.1.7
+   author    : www.zadenzo.com
+
+File Name    : catalog/controller/product/*.php(0)
+VQModObject::applyMod - SEARCH NOT FOUND (ABORTING MOD): $this->url->link('common/home')
+----------------------------------------------------------------------
+
+
+---------- Date: 2021-07-05 11:07:13 ~ IP : 83.8.13.253 ----------
+REQUEST URI : /index.php?route=product/ajaxcompare/compare_list
+MOD DETAILS:
+   modFile   : /home/platne/brasserwis/public_html/comparator/vqmod/xml/seo-single-url-home-continue.xml
+   id        : SEO Single Url - Continue Home Link
+   version   : 1
+   vqmver    : 2.1.7
+   author    : www.zadenzo.com
+
+File Name    : catalog/controller/product/*.php(0)
+VQModObject::applyMod - SEARCH NOT FOUND (ABORTING MOD): $this->url->link('common/home')
+----------------------------------------------------------------------
+
+

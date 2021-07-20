@@ -1,0 +1,13 @@
+<!-- Created using vQmod XML Generator by UKSB - http://www.opencart-extensions.co.uk //-->
+<modification>
+	<id><![CDATA[SEO Single Url - Category Products]]></id>
+	<version><![CDATA[1]]></version>
+	<vqmver><![CDATA[2.1.7]]></vqmver>
+	<author><![CDATA[www.zadenzo.com]]></author>
+	<file name="catalog/controller/product/category.php">
+		<operation>
+			<search position="replace"><![CDATA[$this->url->link('product/product', 'path=' . $this->request->get['path'] . '&product_id=' . $result['product_id'])]]></search>
+			<add><![CDATA[$this->url->link('product/product', 'product_id=' . $result['product_id'])]]></add>
+		</operation>
+	</file>
+</modification>

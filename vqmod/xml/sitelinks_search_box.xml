@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created using vQModerator's XML Generator by The Wizard of Osch for http://www.crystalcopy.nl //-->
+<!-- (Based on vQmod XML Generator by UKSB - http://www.opencart-extensions.co.uk) //-->
+<modification>
+	<id><![CDATA[Google Sitelinks Search Box]]></id>
+	<version><![CDATA[1.0]]></version>
+	<vqmver><![CDATA[2.4.1]]></vqmver>
+	<author><![CDATA[Malaiac]]></author>
+	<file path="catalog/view/theme/*/template/common/" name="header.tpl">
+		<operation error="abort" info="">
+			<search position="after"><![CDATA[<base href="<?php echo $base; ?>" />]]></search>
+			<add><![CDATA[<?php if($sitelinks_search_box) echo $sitelinks_search_box; ?>
+		 
+]]></add>
+		</operation>
+	</file>
+	<file name="catalog/controller/common/header.php">
+		<operation error="abort" info="">
+			<search position="after"><![CDATA[$this->data['scripts'] = $this->document->getScripts();]]></search>
+			<add><![CDATA[
+		// code according to https://developers.google.com/webmasters/richsnippets/sitelinkssearch
+		if(count($this->request->get) == 0 || (isset($this->request->get['route']) && $this->request->get['route'] == 'common/home'))
+		   $this->data['sitelinks_search_box'] = '
+<script type="application/ld+json">
+{
+   "@context": "http://schema.org",
+   "@type": "WebSite",
+   "url": "'.$server.'",
+   "potentialAction": {
+     "@type": "SearchAction",
+     "target": "' . $this->url->link('product/search?q={search_term_string}') . '",
+     "query-input": "required name=search_term_string"
+   }
+}
+</script>';
+		else $this->data['sitelinks_search_box'] = false;
+
+]]></add>
+		</operation>
+	</file>
+</modification>

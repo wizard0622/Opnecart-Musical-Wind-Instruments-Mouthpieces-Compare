@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+
+<file name="admin/language/english/common/header.php">
+<operation>
+<search position="after" offset="1"><![CDATA[$_['text_review']                      = 'Reviews';]]></search>
+<add><![CDATA[$_['text_cacheremove']                      = 'Cache Remove';]]></add>
+</operation>
+</file>
+<file name="admin/controller/common/header.php">
+<operation>
+<search position="after" offset="1"><![CDATA[$this->data['text_review'] = $this->language->get('text_review');]]></search>
+<add><![CDATA[$this->data['text_cacheremove'] = $this->language->get('text_cacheremove');]]></add>
+</operation>
+<operation>
+<search position="after" offset="1"><![CDATA[$this->data['review'] = $this->url->link('catalog/review', 'token=' . $this->session->data['token'], 'SSL');]]></search>
+<add><![CDATA[$this->data['cacheremove'] = $this->url->link('cacheremove/cacheremove', 'token=' . $this->session->data['token'], 'SSL');]]></add>
+</operation>
+</file>
+<file name="admin/view/template/common/header.tpl">
+<operation>
+<search position="after" offset="1"><![CDATA[<li><a href="<?php echo $review; ?>"><?php echo $text_review; ?></a></li>]]></search>
+<add><![CDATA[<li><a href="<?php echo $cacheremove ?> "><?php echo $text_cacheremove; ?></a></li>]]></add>
+</operation>
+</file>
+</modification>

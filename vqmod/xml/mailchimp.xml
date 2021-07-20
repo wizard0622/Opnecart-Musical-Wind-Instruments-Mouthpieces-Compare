@@ -1,0 +1,227 @@
+<modification>
+	<id>Mailchimp Newsletter</id>
+	<version>1.2.2</version>
+	<vqmver>2.3.0</vqmver>
+	<author>Mike - jucemobile.com</author>
+
+
+	<file name="catalog/language/english/english.php">
+		<operation error="log">
+			<search position="before"><![CDATA[// Error]]></search>
+			<add><![CDATA[
+
+				// Enter your MailChimp credentials below
+
+				$_['mailchimp_api_key']    = '89d2d7f1df92387669a6658389623510-us11';
+				$_['mailchimp_list_id']    = 'fe1182cbdb';
+
+				
+			]]></add>
+
+		</operation>
+	</file>
+
+
+	<file name="catalog/controller/account/account.php">
+		<operation error="log">
+			<search position="before"><![CDATA[if (isset($this->session->data['success'])) {]]></search>
+			<add><![CDATA[
+			if (isset($this->session->data['error'])) {
+	    		$this->data['error'] = $this->session->data['error'];
+				unset($this->session->data['error']);
+			} else {
+				$this->data['error'] = '';
+			}
+			]]></add>
+		</operation>
+	</file>
+	<file name="catalog/view/theme/*/template/account/account.tpl">
+		<operation error="log">
+			<search position="before"><![CDATA[<?php if ($success) { ?>]]></search>
+			<add><![CDATA[
+			<?php if ($error) { ?>
+			<div class="warning"><?php echo $error; ?></div>
+			<?php } ?>
+			]]></add>
+		</operation>
+	</file>
+	<file name="catalog/controller/account/newsletter.php">
+		<operation error="log">
+			<search position="before"><![CDATA[public function index() {]]></search>
+			<add><![CDATA[  	public function unsubscribe(){
+  		if( $this->request->post ){
+  			$log = new Log('mailchimp-newsletter.log');
+  			$webhook = $this->request->post;
+	  		if( isset($webhook['data']) ){
+	  			$this->load->model('account/customer');
+		  		$email = $webhook['data']['email'];
+		  		$this->model_account_customer->editNewsletterByEmail($email);
+		  		$log->write("Unsubscribe [WEBHOOK]: ". $webhook['data']['email']);
+	  		}else{
+	  			$log->write("Unsubscribe [WEBHOOK]: Invalid POST request:".var_export($webhook, true));
+	  		}  				
+	  	}else{
+	  		$this->session->data['redirect'] = $this->url->link('account/newsletter', '', 'SSL');
+	  		$this->redirect($this->url->link('account/newsletter', '', 'SSL'));
+	  	}
+  	}]]></add>
+		</operation>
+		<operation error="log">
+			<search position="replace"><![CDATA[$this->session->data['success'] = $this->language->get('text_success');]]></search>
+			<add><![CDATA[
+			$this->language->load('english');	
+			$data = array(
+				'email'		=> $this->customer->getEmail(),
+				'firstname'	=> $this->customer->getFirstname(),
+				'lastname'	=> $this->customer->getLastname(),
+				'method'	=> ($this->request->post['newsletter'])? 'subscribe':'unsubscribe',
+				'key'		=> $this->language->get('mailchimp_api_key'),
+				'list'      => $this->language->get('mailchimp_list_id')
+			);
+
+			if(!$data['email']){ $this->session->data['error'] = "No email address provided";  } 
+			
+			if(!preg_match("/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*$/i", $data['email']))
+			{ 
+				$this->session->data['error'] = "Email address is invalid"; 
+			}
+			
+			if (!isset($this->session->data['error']))
+			{
+				require_once(DIR_SYSTEM."library/MCAPI.class.php");
+				$api = new MCAPI($data['key']);
+				
+				$mergeVars = array('FNAME'=>$data['firstname'],'LNAME'=>$data['lastname']);
+				
+				if($data['method'] == 'subscribe')
+				{
+					if($api->listSubscribe($data['list'], $data['email'], $mergeVars) === true) {
+						$this->session->data['success'] = 'Success! Check your email to confirm sign up.';
+					} else { 
+						$this->session->data['error'] = 'Error: ' . $api->errorMessage; 
+					}
+				}else{
+					if($api->listUnsubscribe($data['list'], $data['email'])){
+						$this->session->data['success'] = 'Success! We have removed your email from the list.';
+					} else { 
+						$this->session->data['error'] = 'Error: ' . $api->errorMessage; 
+					}
+				}
+			}
+			]]></add>
+		</operation>
+	</file>
+	<file name="catalog/model/account/customer.php">
+		<operation error="log">
+			<search position="before"><![CDATA[		public function addCustomer]]></search>
+				<add><![CDATA[private function addToMailChimp($data){
+		$this->language->load('english');
+
+		/*$data = array(
+			'email'		=> $this->request->post['email'],
+			'firstname'	=> $this->request->post['firstname'],
+			'lastname'	=> $this->request->post['lastname'],
+			'key'		=> $this->language->get('mailchimp_api_key'),
+			'list'      => $this->language->get('mailchimp_list_id')
+		);*/
+
+		$data['key']	= $this->language->get('mailchimp_api_key');
+		$data['list']	= $this->language->get('mailchimp_list_id');
+
+		$preg = "/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*$/i";
+		if(!$data['email'])
+		{ 
+			$this->session->data['error'] = "No email address provided";  
+		} 
+		if(!preg_match($preg, $data['email']))
+		{ 
+			$this->session->data['error'] = "Email address is invalid"; 
+		}
+		if (!isset($this->session->data['error']))
+		{
+			require_once(DIR_SYSTEM."library/MCAPI.class.php");
+			$api = new MCAPI($data['key']);
+		
+			$mergeVars = array('FNAME'=>$data['firstname'],'LNAME'=>$data['lastname']);
+
+			if($api->listSubscribe($data['list'], $data['email'], $mergeVars) === true) 
+			{
+				$this->session->data['success'] = 'Success! Check your email to confirm sign up.';
+			} else { 
+				$this->session->data['error'] = 'Error: ' . $api->errorMessage; 
+			}
+		}
+	}
+]]></add>
+		</operation>
+		<operation error="log">
+			<search position="after"><![CDATA[	public function addCustomer($data) {]]></search>
+			<add><![CDATA[
+				if( $data['newsletter'] )
+				{ 
+					$this->addToMailChimp($data);
+				}
+				]]></add>
+		</operation>
+
+		<operation error="log">
+			<search position="before"><![CDATA[public function editNewsletter($newsletter) {]]></search>
+			<add><![CDATA[	public function editNewsletterByEmail($email){
+		$this->db->query("UPDATE " . DB_PREFIX . "customer SET newsletter = '0' WHERE email = '" . $email . "'");
+	}
+
+]]></add>
+		</operation>
+	</file>
+	<file name="catalog/controller/account/edit.php">
+		<operation info="Save the old email so we know what we account we are updating" error="log">
+			<search position="after"><![CDATA[if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {]]></search>
+			<add><![CDATA[$this->data['old_email'] = $this->customer->getEmail();]]></add>
+		</operation>
+		<operation error="log">
+			<search position="after"><![CDATA[$this->model_account_customer->editCustomer($this->request->post);]]></search>
+			<add><![CDATA[
+				if($this->customer->getNewsletter()){
+					$this->language->load('english');
+
+					$data = array(
+						'email'		=> $this->request->post['email'],
+						'firstname'	=> $this->request->post['firstname'],
+						'lastname'	=> $this->request->post['lastname'],
+						'key'		=> $this->language->get('mailchimp_api_key'),
+						'list'      => $this->language->get('mailchimp_list_id'),
+						'old_email'	=> $this->data['old_email']
+					);
+
+					$preg = "/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*$/i";
+
+					if(!$data['email'])
+					{ 
+						$this->session->data['error'] = "No email address provided";  
+					} 
+
+					if(!preg_match($preg, $data['email']))
+					{ 
+						$this->session->data['error'] = "Email address is invalid"; 
+					}
+
+					if (!isset($this->session->data['error']))
+					{
+						require_once(DIR_SYSTEM."library/MCAPI.class.php");
+						$api = new MCAPI($data['key']);
+					
+						$mergeVars = array('FNAME'=>$data['firstname'],'LNAME'=>$data['lastname'], 'NEW-EMAIL'=>$data['email']);
+						
+
+						if($api->listSubscribe($data['list'], $data['old_email'], $mergeVars, NULL, 'html', true, true) === true) 
+						{
+							$this->session->data['success'] = 'Success! Check your email to confirm sign up.';
+						} else { 
+							$this->session->data['error'] = 'Error: ' . $api->errorMessage; 
+						}
+					}
+				}
+			]]></add>
+		</operation>
+	</file>
+</modification>

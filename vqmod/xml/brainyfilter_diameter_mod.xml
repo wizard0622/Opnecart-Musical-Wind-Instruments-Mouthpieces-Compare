@@ -1,0 +1,16 @@
+<modification>
+	<file name="catalog/view/theme/default/template/module/brainyfilter.tpl">
+		<operation>
+			<search position="after" index="1"><![CDATA[<?php $groupUID = substr($section['type'], 0, 1) . $groupId; ?>]]></search>
+			<add><![CDATA[<?php 
+			if(!isset($this->request->cookie['size'])) {$this->request->cookie['size'] == 'mm';}
+			if (isset($this->request->cookie['size']) && $this->request->cookie['size'] == 'mm' && ($group['name'] == 'Bore size interval (inch)' || $group['name'] == 'Cup inner diameter interval (inch)' || $groupUID == 'a24' || $groupUID == 'a29')) {
+continue;
+} elseif (isset($this->request->cookie['size']) && $this->request->cookie['size'] == 'inch' && ($group['name'] == 'Bore size interval (mm)' || $group['name'] == 'Cup inner diameter interval (mm)' || $groupUID == 'a26' || $groupUID == 'a23')) {
+continue;
+}
+?>]]></add>
+		</operation>
+		
+	</file>
+</modification>

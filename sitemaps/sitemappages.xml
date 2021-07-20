@@ -1,0 +1,45 @@
+<?xml-stylesheet type="text/xsl" href="gss.xsl"?>
+<urlset xmlns="http://www.google.com/schemas/sitemap/0.84">
+    <url>
+        <loc>http://mouthpiececomparator.com/about-mouthpiece-comparator</loc>
+        <lastmod>2021-07-03</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>1.0</priority>
+    </url>
+    <url>
+        <loc>http://mouthpiececomparator.com/advertising</loc>
+        <lastmod>2021-07-03</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>1.0</priority>
+    </url>
+    <url>
+        <loc>http://mouthpiececomparator.com/anatomy-of-a-mouthpiece</loc>
+        <lastmod>2021-07-03</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>1.0</priority>
+    </url>
+    <url>
+        <loc>http://mouthpiececomparator.com/contact-us</loc>
+        <lastmod>2021-07-03</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>1.0</priority>
+    </url>
+    <url>
+        <loc>http://mouthpiececomparator.com/press</loc>
+        <lastmod>2021-07-03</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>1.0</priority>
+    </url>
+    <url>
+        <loc>http://mouthpiececomparator.com/Privacy policy</loc>
+        <lastmod>2021-07-03</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>1.0</priority>
+    </url>
+    <url>
+        <loc>http://mouthpiececomparator.com/index.php?route=information/contact</loc>
+        <lastmod>2021-07-03</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.5</priority>
+    </url>
+</urlset>

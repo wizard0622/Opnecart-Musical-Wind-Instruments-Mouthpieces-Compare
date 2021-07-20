@@ -1,0 +1,49 @@
+<!-- Created using vQmod XML Generator by UKSB - http://www.opencart-extensions.co.uk //-->
+<modification>
+	<id><![CDATA[SEO Single Url - Continue Home Link]]></id>
+	<version><![CDATA[1]]></version>
+	<vqmver><![CDATA[2.1.7]]></vqmver>
+	<author><![CDATA[www.zadenzo.com]]></author>
+	<file name="catalog/controller/account/*.php">
+		<operation>
+			<search position="replace"><![CDATA[$this->url->link('common/home')]]></search>
+			<add><![CDATA[$this->config->get('config_url')]]></add>
+		</operation>
+	</file>
+	<file name="catalog/controller/affiliate/*.php">
+		<operation>
+			<search position="replace"><![CDATA[$this->url->link('common/home')]]></search>
+			<add><![CDATA[$this->config->get('config_url')]]></add>
+		</operation>
+	</file>
+	<file name="catalog/controller/checkout/*.php">
+		<operation>
+			<search position="replace"><![CDATA[$this->url->link('common/home')]]></search>
+			<add><![CDATA[$this->config->get('config_url')]]></add>
+		</operation>
+	</file>
+	<file name="catalog/controller/error/*.php">
+		<operation>
+			<search position="replace"><![CDATA[$this->url->link('common/home')]]></search>
+			<add><![CDATA[$this->config->get('config_url')]]></add>
+		</operation>
+	</file>
+	<file name="catalog/controller/checkout/*.php">
+		<operation>
+			<search position="replace"><![CDATA[$this->url->link('common/home')]]></search>
+			<add><![CDATA[$this->config->get('config_url')]]></add>
+		</operation>
+	</file>
+	<file name="catalog/controller/information/*.php">
+		<operation>
+			<search position="replace"><![CDATA[$this->url->link('common/home')]]></search>
+			<add><![CDATA[$this->config->get('config_url')]]></add>
+		</operation>
+	</file>
+	<file name="catalog/controller/product/*.php">
+		<operation>
+			<search position="replace"><![CDATA[$this->url->link('common/home')]]></search>
+			<add><![CDATA[$this->config->get('config_url')]]></add>
+		</operation>
+	</file>
+</modification>

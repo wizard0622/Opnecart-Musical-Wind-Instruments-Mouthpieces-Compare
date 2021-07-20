@@ -1,0 +1,74 @@
+<modification>
+	<id>Opextensions - Manufacturer to header navigation</id>
+	<version>1.5.x</version>
+	<vqmver>1.1.0</vqmver>
+	<author>opextensions</author>
+	<email>duongkhoangiam@gmail.com</email>
+	<file name="catalog/controller/common/header.php">
+		<operation>
+			<search position="after" index="1"><![CDATA[$this->data['categories'][] = array(]]></search>
+			<add><![CDATA['sort_order'  => $category['sort_order'],]]></add>
+		</operation>
+		<operation>
+			<search position="before">
+				<![CDATA[if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/common/header.tpl')) {]]>
+			</search>
+			<add>
+				<![CDATA[
+				
+				if (isset($this->request->get['category_id'])) {
+		$category_id = $this->request->get['category_id'];
+		}
+		elseif (isset($this->request->cookie['cat'])) {
+			$category_id = $this->request->cookie['cat'];
+		} else {
+	setcookie('cat', '60', time() + 60 * 60 * 24 * 30, '/', $this->request->server['HTTP_HOST']);
+	$this->redirect('/');
+	}
+				
+				//load manufacturer
+				$this->load->model('catalog/manufacturer');
+				$this->data['manufacturer'] = array();
+				$manufacturer_data = array();
+				$manufacturers = $this->model_catalog_manufacturer->getManufacturersByCatID($category_id);
+				if($manufacturers){
+				  //$first_man_id = $manufacturers[0]['manufacturer_id'];
+					foreach($manufacturers as $manufacturer){
+						$manufacturer_data[] = array(
+							'name' => $manufacturer['name'],
+							'href' => $this->url->link('product/manufacturer/product', 'category_id='.$category_id.'&manufacturer_id='.$manufacturer['manufacturer_id'])
+						);
+					}}
+				$this->data['manufacturer'][] = array(
+					'sort_order' => 1,
+					'name' => $this->language->get('text_manufacturer'),
+					'children' => $manufacturer_data,
+					'column'   => 1,
+          'href'     => $this->url->link('product/manufacturer/product','category_id='.$category_id.'&manufacturer_id='.$manufacturers[0]['manufacturer_id']),
+				);
+				$this->data['categories'] = array_merge($this->data['categories'],$this->data['manufacturer']);
+				$sort_order = array(); 
+	  
+				foreach ($this->data['categories'] as $key => $value) {
+		      		$sort_order[$key] = $value['sort_order'];
+		    	}
+				
+				array_multisort($sort_order, SORT_ASC, $this->data['categories']);]]>
+				
+			</add>
+		</operation>
+	</file>
+	<file name="catalog/language/*/common/header.php">
+		<operation>
+			<search position="after">
+				<![CDATA[<?php]]>
+			</search>
+			<add>
+				<![CDATA[
+					$_['text_manufacturer'] = 'Manufaturers charts';
+				]]>
+			</add>
+		</operation>
+	</file>
+</modification>
+

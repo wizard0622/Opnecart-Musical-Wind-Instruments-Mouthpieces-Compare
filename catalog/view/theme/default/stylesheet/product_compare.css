@@ -1,0 +1,162 @@
+.fixed{
+    position: fixed !important;
+    top: 0;
+    width: 980px !important;
+    z-index: 999999;
+}
+
+#product_compare_wrapper{
+ 
+	position: fixed;
+	bottom: 25px; 
+    width: 980px;
+    display: block;
+
+-webkit-box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.4); 
+-moz-box-shadow: 0px 1px 6px rgba(23, 69, 88, .5);
+ z-index: 9999;
+
+}
+
+#product_compare_list{
+    position: relative;
+    background: #FFF;
+ 
+    padding: 0px 15px;
+    background: #Fff;
+    overflow: hidden;
+
+
+}
+
+#product_compare_list #pList{
+    float: left;
+    width: 800px;
+}
+
+#product_compare_list .cProductInfo{
+    position: relative;
+    display: inline-block;
+    width: 130px;
+    height: 100px!important;
+    margin-right: 20px;
+    background: #eeeeee;
+    margin-top: 10px;
+    margin-bottom: 10px;
+} 
+
+#product_compare_list .cProductInfo .pImage{
+    display:none;
+    float: left;
+    width: 60px;
+    height: 80px;
+    line-height: 80px;
+    font-size: 42px;
+    color: #AAA;
+    background: #FFF;
+    text-align: center;
+    margin-right: 5px;
+    border: 1px solid #A9D9E2; 
+}
+
+#product_compare_list .cProductInfo .cLoader{
+    text-indent: -9999px;
+    background: #FFF url(../image/cloading.gif) center center no-repeat;
+}
+
+#product_compare_list .cProductInfo .pName{
+   
+ padding: 10px;
+    color: #999;
+     
+
+
+}
+
+#product_compare_list .cProductInfo .pName1{
+   
+  
+}
+
+
+
+
+#product_compare_list .cProductInfo .cProductRemove{
+    position: absolute;
+    bottom: -5px;
+    right: -5px;
+    width: 16px;
+    height: 16px;
+    outline: none;
+    background: #FFF url(../image/cp_close.png) no-repeat;
+    
+    border-radius: 7px;
+    -moz-border-radius: 7px;
+    -webkit-border-radius: 7px;
+}
+
+#product_compare_list #pCompareButton{
+    float: left;
+    padding: 10px 5px;
+    margin: 39px 0 0 10px;
+    text-decoration: none;
+    text-transform: uppercase;
+    text-align: center;
+    color: #FFF;
+    outline: none;
+    background: #F78D3F;
+    box-shadow: none;
+    -moz-box-shadow: none;
+    webkit-box-shadow: none;
+}
+
+#product_compare_list #pCompareButton.disable{
+    background: #F78D3F;
+    border-color: #BBBBBB;
+    cursor: default;
+}
+
+#product_compare_wrapper #cProductBoxRemove{
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 18px;
+    height: 18px;
+    background: url(../image/cBox_close.png) no-repeat;
+    
+    border-radius: 7px;
+    -moz-border-radius: 7px;
+    -webkit-border-radius: 7px;
+}
+
+a.slick-prev {
+  position: absolute;
+  width: 20px;
+  height: 120px;
+  background: url("../image/arrowl.png") no-repeat scroll -4px 41px #FFF;
+  /* rgba(0, 0, 0, 0);*/  
+  left: 0px;
+  top: 5px;
+  display: none;
+}
+#product_compare_wrapper:hover a.slick-prev {
+  display: block;
+} 
+a.slick-next {
+  position: absolute;
+  width: 20px;
+  height: 120px;
+  background: url("../image/arrowr.png") no-repeat scroll -4px 41px #FFF;
+  /* rgba(0, 0, 0, 0);*/  
+  left: 756px;
+  top: 5px;
+  z-Index: 1000;
+}
+.mouthpiecebox {
+  color: #585858;
+  font-weight: lighter;
+  font-family: Georgia;
+  font-size: 18px;
+  height: 33px;
+  text-align: center;
+}

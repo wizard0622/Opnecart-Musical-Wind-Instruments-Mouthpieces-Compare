@@ -1,0 +1,25 @@
+<modification>
+    <id>SOFORP FastSitemap</id>
+    <version>1.1.0</version>
+    <vqmver>2.1</vqmver>
+    <author>Alexander Sorokin ( http://soforp.com ) </author>
+
+    <file name="catalog/controller/common/seo_url.php">
+        <operation>
+            <search position="after"><![CDATA[$data['route'] == 'product/product']]></search>
+            <add><![CDATA[
+            /* SOFORP Fast Sitemap - begin */
+            if( $data['route'] == 'product/product' && "1" == $this->registry->get("product_keyword_cache" ) ) {
+                $this->registry->set("product_vqmod_patch", 1 );
+                if( "1" == $this->registry->get("product_keyword_not_empty") ) {
+                    $url .= '/' . $this->registry->get("product_keyword");
+                    unset($data[$key]);
+                }
+                continue;
+            }
+            /* SOFORP Fast Sitemap - end */
+            ]]></add>
+        </operation>
+    </file>
+
+</modification>

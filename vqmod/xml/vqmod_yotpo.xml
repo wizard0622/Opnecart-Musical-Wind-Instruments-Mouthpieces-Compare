@@ -1,0 +1,314 @@
+<modification>
+    <id>Yotpo www.yotpo.com</id>
+      <version>1.0.9</version>
+		   <vqmver>2.2.1</vqmver>
+       <author>Yotpo</author>	
+
+    <file name="catalog/view/theme/*/template/common/header.tpl">
+      <operation info="Yotpo - get yQuery.js">
+        <search position="before" index="1" error="log">
+          <![CDATA[</head>]]>
+        </search>
+        <add>
+          <![CDATA[
+            <?php if(isset($yotpo_app_key) && is_string($yotpo_app_key)) {?>
+              <script type="text/javascript">
+                (function e(){var e=document.createElement("script");e.type="text/javascript",e.async=true,e.src="//staticw2.yotpo.com/<?php echo $yotpo_app_key; ?>/widget.js";var t=document.getElementsByTagName("script")[0];t.parentNode.insertBefore(e,t)})();
+              </script>
+            <?php } ?>
+          ]]>
+        </add>
+      </operation>
+    </file>
+    
+    <file name="catalog/controller/common/header.php">
+      <operation info="Yotpo - get yQuery.js">
+        <search position="after" index="1" error="log">
+          <![CDATA[protected function index() {]]>
+        </search>
+        <add>
+        	<![CDATA[ $this->data['yotpo_app_key'] = $this->config->get('yotpo_appkey');	]]>
+        </add>
+      </operation>
+    </file>
+    
+    <file name="catalog/controller/product/category.php">
+    <operation info="Yotpo - set bottom line data">
+      <search position="after" index="1" error="log">
+        <![CDATA[public function index() {]]>
+      </search>
+      <add><![CDATA[
+          $yotpo_bottom_line_enabled = $this->config->get('yotpo_bottom_line_enabled');
+          $this->data['yotpo_bottom_line_enabled'] = $yotpo_bottom_line_enabled;
+      	  if($yotpo_bottom_line_enabled) { 
+        	  $this->data['appkey'] = $this->config->get('yotpo_appkey');
+          	$this->data['language'] = $this->config->get('yotpo_language');
+          	$this->data['domain'] = HTTP_SERVER;          	
+          }
+      ]]></add>
+    </operation>
+    <operation info="Yotpo - set bottom line data">
+      <search position="before" index="1" error="log">
+        <![CDATA[if (isset($this->request->get['path'])) {]]>
+      </search>
+      <add><![CDATA[
+      	  if($yotpo_bottom_line_enabled) { 
+      	  	$yotpo_bread_crumbs = array();
+          	foreach ($this->data['breadcrumbs'] as $breadcrumb) {
+    	 		$yotpo_bread_crumbs[] = $breadcrumb['text'];
+    	 	 }
+         	 $this->data['yotpo_bread_crumbs'] = implode(';', $yotpo_bread_crumbs);
+          }	 
+      ]]></add>
+    </operation>
+    </file>
+
+    <file name="catalog/view/theme/*/template/product/category.tpl">
+        <operation info="Yotpo - add bottom line div">
+            <search position="before" index="1" error="log">
+            <![CDATA[<?php if ($product['rating']) { ?>]]>
+            </search>
+            <add>
+            <![CDATA[
+              <?php if ($yotpo_bottom_line_enabled == 'on') { ?>  
+              	<div class="rating">   	
+	              <div class="yotpo bottomLine"
+	                data-appkey="<?php echo $appkey; ?>"
+	                data-domain="<?php echo $domain; ?>"
+	                data-product-id="<?php echo $product['product_id']; ?>"
+	                data-product-models=""
+	                data-name="<?php echo strip_tags(html_entity_decode($product['name'])); ?>"
+	                data-url="<?php echo strip_tags(html_entity_decode($product['href'])); ?>"
+	                data-image-url="<?php echo urldecode($product['thumb']); ?>"
+	                data-description="<?php echo substr(strip_tags(html_entity_decode($product['description'])),0,1000); ?>"
+	                data-bread-crumbs="<?php echo $yotpo_bread_crumbs; ?>"
+	                data-lang="<?php echo $language; ?>">
+	              </div>
+	            </div>  
+	          <?php } ?>    	            
+			]]>
+            </add>
+        </operation> 
+    </file>
+
+    <file name="catalog/controller/product/search.php">
+	    <operation info="Yotpo - set bottom line data">
+	      <search position="before" index="1" error="log">
+	        <![CDATA[$this->response->setOutput($this->render());]]>
+	      </search>
+	      <add><![CDATA[
+	          $yotpo_bottom_line_enabled = $this->config->get('yotpo_bottom_line_enabled');
+	          $this->data['yotpo_bottom_line_enabled'] = $yotpo_bottom_line_enabled;
+	      	  if($yotpo_bottom_line_enabled) { 
+	        	  $this->data['appkey'] = $this->config->get('yotpo_appkey');
+	          	$this->data['language'] = $this->config->get('yotpo_language');
+	          	$this->data['domain'] = HTTP_SERVER;	          	
+	          }
+	      ]]></add>
+	    </operation>
+    </file>
+
+    <file name="catalog/view/theme/*/template/product/search.tpl">
+	    <operation info="Yotpo - set bottom line data">
+	      <search position="before" index="1" error="log">
+	        <![CDATA[<?php if ($product['rating']) { ?>]]>
+	      </search>
+	      <add><![CDATA[
+	      <?php if ($yotpo_bottom_line_enabled == 'on') { ?>
+	      	<div class="rating">
+              <div class="yotpo bottomLine"
+                data-appkey="<?php echo $appkey; ?>"
+                data-domain="<?php echo $domain; ?>"
+                data-product-id="<?php echo $product['product_id']; ?>"
+                data-product-models=""
+                data-name="<?php echo strip_tags(html_entity_decode($product['name'])); ?>"
+                data-url="<?php echo strip_tags(html_entity_decode($product['href'])); ?>"
+                data-image-url="<?php echo urldecode($product['thumb']); ?>"
+                data-description="<?php echo substr(strip_tags(html_entity_decode($product['description'])),0,1000); ?>"
+                data-bread-crumbs=""
+                data-lang="<?php echo $language; ?>">
+              </div>
+            </div>
+          <?php } ?>  
+	      ]]></add>
+	    </operation>
+    </file>        
+    <file name="catalog/view/theme/*/template/product/product.tpl">   
+          <operation info="Yotpo - set widget tab name">
+              <search position="after" index="1" error="log">
+              <![CDATA[<div id="tabs" class="htabs">]]>
+              </search>
+              <add>
+              <![CDATA[
+                <?php if ($yotpo_widget_location == 'tab') { ?>
+                  <a href="#tab-yotpo-review"><?php echo $yotpo_review_tab_name; ?></a>
+                <?php  } ?>
+              ]]>
+              </add>
+          </operation>
+          <operation info="Yotpo - set widget in tab">
+              <search position="before" index="1" error="log">
+              <![CDATA[<div id="tab-description"]]>
+              </search>
+              <add>
+              <![CDATA[
+                <?php if ($yotpo_widget_location == 'tab') { ?>
+                 <div id="tab-yotpo-review" class="tab-content">
+                  <div class="yotpo yotpo-main-widget"
+                    data-product-id="<?php echo $product_id; ?>"
+                    data-name="<?php echo $product_name; ?>"
+                    data-url="<?php echo $product_url; ?>"
+                    data-image-url="<?php echo $product_image_url; ?>"
+                    data-description="<?php echo $product_description; ?>"
+                    data-lang="<?php echo $language; ?>">
+                  </div>
+                 </div> 
+                <?php  } ?>
+        ]]>
+              </add>
+          </operation> 
+          <operation info="Yotpo - set widget in footer">
+              <search position="before" index="1" error="log">
+              <![CDATA[<div id="tabs" class="htabs"><a href="#tab-description"><?php echo $tab_description; ?></a>]]>
+              </search>
+              <add>
+              <![CDATA[
+                <?php if ($yotpo_widget_location == 'footer') { ?>
+                  <div class="yotpo yotpo-main-widget"
+                    data-product-id="<?php echo $product_id; ?>"
+                    data-name="<?php echo $product_name; ?>"
+                    data-url="<?php echo $product_url; ?>"
+                    data-image-url="<?php echo $product_image_url; ?>"
+                    data-description="<?php echo $product_description; ?>"
+                    data-lang="<?php echo $language; ?>">
+                  </div>
+                <?php  } ?>
+        ]]>
+              </add>
+          </operation> 
+        <operation>
+            <search position="replace" index="1">
+			<![CDATA[<?php if ($review_status) { ?>]]>
+			</search>
+            <add>
+			<![CDATA[<?php if (true) { ?>]]>
+			</add>
+        </operation>
+        <operation>
+            <search position="after">
+			<![CDATA[<div class="review">]]>
+			</search>
+            <add><![CDATA[
+            <?php if ($review_status) { ?>
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="before">
+			<![CDATA[<div class="share">]]>
+			</search>
+            <add><![CDATA[
+            <?php } ?>
+            ]]></add>
+        </operation>                        
+    </file>    
+
+
+ 
+
+    <file name="catalog/controller/product/product.php">
+      <operation info="Yotpo - get widget product info">
+        <search position="before" index="1" error="log">
+          <![CDATA[$this->response->setOutput($this->render());]]>
+        </search>
+        <add><![CDATA[
+            $this->data['appkey'] = $this->config->get('yotpo_appkey');
+            $this->data['language'] = $this->config->get('yotpo_language');
+            $this->data['domain'] = HTTP_SERVER;
+            $this->data['product_id'] = $this->request->get['product_id'];
+            $this->data['product_name'] = strip_tags(html_entity_decode($this->data['heading_title']));
+            $this->data['product_description'] = substr(strip_tags(html_entity_decode($this->data['description'])),0,1000);
+            $this->data['product_url'] = HTTP_SERVER . 'index.php?route=product/product&product_id=' . $this->data['product_id'];
+ 	       
+      	  	$yotpo_bread_crumbs = array();
+          	foreach ($this->data['breadcrumbs'] as $breadcrumb) {
+    	 		$yotpo_bread_crumbs[] = $breadcrumb['text'];
+    	  	}
+         	$this->data['yotpo_bread_crumbs'] = implode(';', $yotpo_bread_crumbs); 	       
+            $this->data['product_image_url'] = $this->data['thumb'];
+            
+            $product = $this->model_catalog_product->getProduct($this->data['product_id']);
+                      
+            $this->data['product_models'] = $product['model'];
+
+            $this->data['yotpo_review_tab_name'] = $this->config->get('yotpo_review_tab_name');
+            $this->data['yotpo_widget_location'] = $this->config->get('yotpo_widget_location');            
+          	$this->data['yotpo_bottom_line_enabled'] = $this->config->get('yotpo_bottom_line_enabled');
+        ]]></add>
+      </operation>
+    </file>
+
+    <file name="admin/controller/sale/order.php">
+      <operation info="Yotpo - call mail after purchase">
+        <search position="after" index="1" error="log">
+          <![CDATA[$this->model_sale_order->addOrderHistory($this->request->get['order_id'], $this->request->post);]]>
+        </search>
+        <add><![CDATA[
+			$this->load->model('tool/yotpo');
+			$this->model_tool_yotpo->make_single_map($this->request->get['order_id']);
+        ]]></add>
+      </operation>
+      <operation info="Yotpo - call mail after purchase">
+        <search position="after" index="1" error="log">
+          <![CDATA[$this->model_sale_order->editOrder($this->request->get['order_id'], $this->request->post);]]>
+        </search>
+        <add><![CDATA[
+      		$this->load->model('tool/yotpo');
+     		$this->model_tool_yotpo->make_single_map($this->request->get['order_id']);
+        ]]></add>
+      </operation>
+    </file>
+    
+    <file name="catalog/controller/checkout/success.php">
+      <operation info="Yotpo - Set conversion parameters">
+        <search position="after" index="1" error="log">
+          <![CDATA[public function index() {]]>
+        </search>
+        <add><![CDATA[    
+        	$app_key = $this->config->get('yotpo_appkey');    	
+        	if (isset($this->session->data['order_id']) && !empty($app_key)) {      	
+				$this->load->model('account/order');				
+				$orders_total = $this->model_account_order->getOrderTotals($this->session->data['order_id']);
+				$total = null;
+				foreach ($orders_total as $order_total) {	
+					if ($order_total['code'] == 'total') {
+						
+						$total = $order_total['value'];
+					}
+				}
+				$conversion_params = "app_key="			.$app_key.
+						 			 "&order_id="		.$this->session->data['order_id'].
+						 			 "&order_amount="	.$total.
+						 			 "&order_currency="	.$this->session->data['currency'];
+				$conversion_url = "https://api.yotpo.com/conversion_tracking.gif?$conversion_params";
+				$this->data['yotpoConversionUrl'] = $conversion_url;
+			}
+        ]]></add>
+      </operation>
+    </file>
+    
+    <file name="catalog/view/theme/*/template/common/success.tpl">
+      <operation info="Yotpo - Call conversion">
+        <search position="after" index="1" error="log">
+          <![CDATA[<div id="content">]]>
+        </search>
+        <add><![CDATA[
+        		<?php if(isset($yotpoConversionUrl)) { ?>
+					<img 
+					   	src="<?php echo $yotpoConversionUrl ?>"
+						width="1"
+						height="1"></img>
+				<?php } ?>
+        ]]></add>
+      </operation>
+    </file>
+</modification>
